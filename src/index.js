@@ -9,8 +9,11 @@ export default function(babel) {
                 const filename = state.file.opts.filename.replace(/\\/g,"\\\\");
                 if(!filename.includes("node_modules")){
                     console.log(state.file.opts.filename + "==> Enter "+path.node.id.name);
-                    
+                    // const functionCaller = `console.log("caller: "+new Error().stack.toString().match(/at \w+\.\w+/)[0].split('.')[1]);`;
+                    const functionCaller = `console.log("caller: "+new Error().stack.toString());`;
+                   
                     const codeStart = `console.log("${filename} ${path.node.id.name} started.");`;
+                    path.get('body').unshiftContainer('body',babel.parse(functionCaller).program);
                     path.get('body').unshiftContainer('body',babel.parse(codeStart).program);
 
                     const codeEnd = `console.log("${filename} ${path.node.id.name} ended.");`;
